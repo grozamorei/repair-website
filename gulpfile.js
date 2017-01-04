@@ -1,20 +1,26 @@
+const DEBUG_PORT = 3001
+const RELOAD_TIMER = 200
+
 const gulp = require('gulp')
 
-gulp.task('server-tests', function () {
+gulp.task('server-tests', () => {
     console.log('test stub')
 })
 
-gulp.task('nodemon-run', ['server-tests'], function() {
+gulp.task('nodemon-run', ['server-tests'], () => {
     const nodemon = require('gulp-nodemon')
-    const path = require('path')
-    const nd = nodemon({
+    const livereload = require('gulp-livereload')
+    livereload.listen()
+
+    nodemon({
         script: './app.js',
         ext: 'js',
         cwd: './src/',
-        tasks: (files) => {
-            return ['server-tests']
-        },
-        env: {NODE_ENV: 'DEVELOPMENT'}
+        env: {NODE_ENV: 'DEVELOPMENT', PORT: DEBUG_PORT}
+    }).on('restart', (files) => {
+        setTimeout(()=> {
+            gulp.src(files).pipe(livereload())
+        }, RELOAD_TIMER)
     })
 })
 

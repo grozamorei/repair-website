@@ -1,11 +1,12 @@
 
 const express = require('express')
 const app = express()
+const port = process.env.PORT || 80
 
 app.get('/', (req, res) => {
-    res.send('hellolo')
+    res.send('page preved')
 })
 
-app.listen(3000, () => {
-    console.log('started listening')
+app.listen(port, () => {
+    console.log('started listening on %d', port)
 })
